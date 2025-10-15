@@ -4,20 +4,13 @@ import com.sistema.login.dao.UsuarioDAO;
 import com.sistema.login.model.Usuario;
 import com.sistema.login.util.PasswordUtil;
 import com.sistema.login.util.ValidacionUtil;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+import javafx.scene.layout.*;
+import javafx.scene.text.*;
 import javafx.stage.Stage;
 
-/**
- * Vista de Login - Pantalla de inicio de sesión
- */
 public class LoginView {
 
     private Stage stage;
@@ -29,10 +22,6 @@ public class LoginView {
         usuarioDAO = new UsuarioDAO();
     }
 
-    /**
-     * Muestra la ventana de Login
-     * @param stage - Ventana principal
-     */
     public void show(Stage stage) {
         this.stage = stage;
 
@@ -114,9 +103,7 @@ public class LoginView {
         stage.show();
     }
 
-    /**
-     * Realiza el proceso de login
-     */
+    //Realiza el proceso de login
     private void realizarLogin() {
         // Obtener datos
         String usuarioOCorreo = ValidacionUtil.limpiarTexto(txtUsuario.getText());
@@ -150,17 +137,13 @@ public class LoginView {
         bienvenidaView.show(stage);
     }
 
-    /**
-     * Abre la ventana de registro
-     */
+    //Abre la ventana de registro
     private void abrirRegistro() {
         RegistroView registroView = new RegistroView();
         registroView.show(stage);
     }
 
-    /**
-     * Muestra un mensaje de error
-     */
+    //Muestra un mensaje de error
     private void mostrarError(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(titulo);
@@ -169,9 +152,7 @@ public class LoginView {
         alert.showAndWait();
     }
 
-    /**
-     * Muestra un mensaje de éxito
-     */
+    //Muestra un mensaje de éxito
     private void mostrarExito(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);

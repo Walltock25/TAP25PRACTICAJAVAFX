@@ -1,33 +1,14 @@
 package com.sistema.login.util;
-
 import org.mindrot.jbcrypt.BCrypt;
 
-/**
- * Clase de utilidad para el manejo seguro de contraseñas
- * Usa BCrypt para encriptación (hashing)
- */
 public class PasswordUtil {
 
-    /**
-     * Encripta una contraseña usando BCrypt
-     * BCrypt genera automáticamente un "salt" único para cada contraseña
-     *
-     * @param password la contraseña en texto plano
-     * @return el hash de la contraseña
-     */
     public static String encriptarPassword(String password) {
         // BCrypt.hashpw genera un hash seguro con salt automático
         // El número 12 es el "costo" (work factor) - más alto = más seguro pero más lento
         return BCrypt.hashpw(password, BCrypt.gensalt(12));
     }
 
-    /**
-     * Verifica si una contraseña coincide con un hash almacenado
-     *
-     * @param password la contraseña en texto plano a verificar
-     * @param hashedPassword el hash almacenado en la base de datos
-     * @return true si la contraseña es correcta, false en caso contrario
-     */
     public static boolean verificarPassword(String password, String hashedPassword) {
         try {
             // BCrypt.checkpw compara de forma segura la contraseña con el hash
@@ -37,19 +18,6 @@ public class PasswordUtil {
             return false;
         }
     }
-
-    /**
-     * Valida la fortaleza de una contraseña
-     * Requisitos:
-     * - Mínimo 8 caracteres
-     * - Al menos una mayúscula
-     * - Al menos una minúscula
-     * - Al menos un número
-     * - Al menos un carácter especial
-     *
-     * @param password la contraseña a validar
-     * @return true si cumple todos los requisitos, false en caso contrario
-     */
     public static boolean esPasswordFuerte(String password) {
         if (password == null || password.length() < 8) {
             return false;
@@ -77,13 +45,6 @@ public class PasswordUtil {
 
         return tieneMayuscula && tieneMinuscula && tieneNumero && tieneEspecial;
     }
-
-    /**
-     * Obtiene un mensaje descriptivo de los requisitos de contraseña faltantes
-     *
-     * @param password la contraseña a evaluar
-     * @return mensaje con los requisitos faltantes
-     */
     public static String obtenerMensajeValidacion(String password) {
         if (password == null || password.isEmpty()) {
             return "La contraseña no puede estar vacía";

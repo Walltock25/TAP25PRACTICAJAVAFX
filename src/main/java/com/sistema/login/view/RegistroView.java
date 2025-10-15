@@ -4,21 +4,14 @@ import com.sistema.login.dao.UsuarioDAO;
 import com.sistema.login.model.Usuario;
 import com.sistema.login.util.PasswordUtil;
 import com.sistema.login.util.ValidacionUtil;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+import javafx.scene.layout.*;
+import javafx.scene.text.*;
 import javafx.stage.Stage;
 import java.time.LocalDate;
 
-/**
- * Vista de Registro - Pantalla para crear nuevos usuarios
- */
 public class RegistroView {
 
     private Stage stage;
@@ -34,10 +27,6 @@ public class RegistroView {
         usuarioDAO = new UsuarioDAO();
     }
 
-    /**
-     * Muestra la ventana de Registro
-     * @param stage - Ventana principal
-     */
     public void show(Stage stage) {
         this.stage = stage;
 
@@ -166,9 +155,7 @@ public class RegistroView {
         stage.show();
     }
 
-    /**
-     * Realiza el proceso de registro
-     */
+    //Realiza el proceso de registro
     private void realizarRegistro() {
         // Obtener datos
         String nombreCompleto = ValidacionUtil.limpiarTexto(txtNombreCompleto.getText());
@@ -241,25 +228,19 @@ public class RegistroView {
         boolean exito = usuarioDAO.insertarUsuario(nuevoUsuario);
 
         if (exito) {
-            mostrarExito("¡Registro Exitoso!",
-                    "Tu cuenta ha sido creada correctamente.\nAhora puedes iniciar sesión.");
+            mostrarExito("Registrado Correctamente",
+                    "Tu cuenta ha sido creada.\nAhora puedes iniciar sesión.");
             volverLogin();
         } else {
             mostrarError("Error", "Hubo un problema al crear tu cuenta.\nIntenta nuevamente.");
         }
     }
 
-    /**
-     * Vuelve a la ventana de login
-     */
     private void volverLogin() {
         LoginView loginView = new LoginView();
         loginView.show(stage);
     }
 
-    /**
-     * Muestra un mensaje de error
-     */
     private void mostrarError(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(titulo);
@@ -268,9 +249,6 @@ public class RegistroView {
         alert.showAndWait();
     }
 
-    /**
-     * Muestra un mensaje de éxito
-     */
     private void mostrarExito(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);

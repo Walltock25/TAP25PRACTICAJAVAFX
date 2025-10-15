@@ -1,40 +1,23 @@
 package com.sistema.login.view;
 
 import com.sistema.login.model.Usuario;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+import javafx.scene.text.*;
 import javafx.stage.Stage;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Vista de Bienvenida - Pantalla que se muestra después del login exitoso
- */
 public class BienvenidaView {
 
     private Stage stage;
     private Usuario usuario;
 
-    /**
-     * Constructor que recibe el usuario logueado
-     *
-     * @param usuario - Usuario que inició sesión
-     */
     public BienvenidaView(Usuario usuario) {
         this.usuario = usuario;
     }
 
-    /**
-     * Muestra la ventana de Bienvenida
-     *
-     * @param stage - Ventana principal
-     */
     public void show(Stage stage) {
         this.stage = stage;
 
@@ -52,12 +35,8 @@ public class BienvenidaView {
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);");
         contenedor.setMaxWidth(450);
 
-        // Emoji/Ícono de bienvenida
-        Label lblIcono = new Label("👋");
-        lblIcono.setFont(Font.font(60));
-
         // Título de bienvenida
-        Label lblBienvenida = new Label("¡Bienvenido!");
+        Label lblBienvenida = new Label("Bienvenido");
         lblBienvenida.setFont(Font.font("Arial", FontWeight.BOLD, 32));
         lblBienvenida.setStyle("-fx-text-fill: #2c3e50;");
 
@@ -109,7 +88,7 @@ public class BienvenidaView {
                 lblFechaNac, lblRegistro);
 
         // Botón cerrar sesión
-        Button btnCerrarSesion = new Button("🚪 Cerrar Sesión");
+        Button btnCerrarSesion = new Button("Cerrar Sesión");
         btnCerrarSesion.setPrefWidth(200);
         btnCerrarSesion.setPrefHeight(40);
         btnCerrarSesion.setFont(Font.font("Arial", FontWeight.BOLD, 14));
@@ -124,7 +103,7 @@ public class BienvenidaView {
                         "-fx-cursor: hand; -fx-background-radius: 20;"));
 
         // Añadir elementos al contenedor y escena
-        contenedor.getChildren().addAll(lblIcono, lblBienvenida, lblNombre, lblSeparador, infoBox, btnCerrarSesion);
+        contenedor.getChildren().addAll( lblBienvenida, lblNombre, lblSeparador, infoBox, btnCerrarSesion);
         root.getChildren().add(contenedor);
 
         Scene scene = new Scene(root, 600, 520);
@@ -133,29 +112,20 @@ public class BienvenidaView {
         stage.show();
     }
 
-    /**
-     * Acción de cerrar sesión
-     *
-     * - Cierra la ventana actual.
-     * - Aquí puedes agregar la navegación de regreso a la vista de login.
-     */
     private void cerrarSesion() {
-        // Mensaje de confirmación simple (opcional)
+        // Mensaje de confirmación
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Sesión");
+        alert.setTitle("Sesión Cerrada");
         alert.setHeaderText(null);
-        alert.setContentText("Sesión cerrada correctamente.");
+        alert.setContentText("Has cerrado sesión correctamente.");
         alert.initOwner(stage);
         alert.showAndWait();
 
-        // Limpiar datos de sesión y cerrar ventana
+        // Limpiar datos de sesión
         this.usuario = null;
-        if (stage != null) {
-            stage.close();
-        }
 
-        // TODO: Si tienes una clase LoginView, instanciarla y mostrarla aquí.
-        // Ejemplo (descomentar si existe LoginView):
-        // new LoginView().show(new Stage());
+        // Regresar a la ventana de login
+        LoginView loginView = new LoginView();
+        loginView.show(stage);
     }
 }

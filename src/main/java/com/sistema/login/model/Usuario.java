@@ -3,10 +3,6 @@ package com.sistema.login.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-/**
- * Clase que representa un usuario del sistema
- * Cada instancia almacena los datos de un usuario
- */
 public class Usuario {
 
     private int id;
@@ -43,13 +39,6 @@ public class Usuario {
     }
 
     // Getters y Setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
