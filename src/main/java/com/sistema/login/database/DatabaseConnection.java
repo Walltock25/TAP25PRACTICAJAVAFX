@@ -8,29 +8,45 @@ public class DatabaseConnection {
 
     // Configuración de la base de datos
     private static final String URL = "jdbc:mysql://localhost:3306/sistema_login";
-    private static final String USER = "root"; // Cambia según tu configuración
-    private static final String PASSWORD = "Creativo52"; // Cambia según tu configuración
+    private static final String USER = "root";
+    private static final String PASSWORD = "Creativo52";
 
-    // Instancia única de la conexión (Singleton)
-    private static Connection connection = null;
+    // Instancia única (volatile para thread-safety)
+    private static volatile DatabaseConnection instance;
+    private Connection connection;
 
-    private DatabaseConnection() {}
+    // Constructor privado para evitar instancias externa
+    private DatabaseConnection() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("Conexión exitosa a la base de datos");
+        } catch (ClassNotFoundException e) {
+            System.err.println("Error: Driver MySQL no encontrado");
+            throw new RuntimeException("Driver no encontrado", e);
+        } catch (SQLException e) {
+            System.err.println("Error al conectar a la base de datos");
+            throw new RuntimeException("Error de conexión", e);
+        }
+    }
 
-    public static Connection getConnection() throws SQLException {
-        // Si la conexión no existe o está cerrada, crear una nueva
-        if (connection == null || connection.isClosed()) {
-            try {
-                // Cargar el driver de MySQL
-                Class.forName("com.mysql.cj.jdbc.Driver");
-
-                // Establecer la conexión
-                connection = DriverManager.getConnection(URL, USER, PASSWORD);
-                System.out.println("✓ Conexión exitosa a la base de datos");
-
-            } catch (ClassNotFoundException e) {
-                System.err.println("✗ Error: Driver MySQL no encontrado");
-                throw new SQLException("Driver no encontrado", e);
+    //Obtiene la instancia única de DatabaseConnection (Double-checked locking)
+    public static DatabaseConnection getInstance() {
+        if (instance == null) {
+            synchronized (DatabaseConnection.class) {
+                if (instance == null) {
+                    instance = new DatabaseConnection();
+                }
             }
+        }
+        return instance;
+    }
+
+    //Obtiene la conexión actual, recreándola si está cerrada
+    public Connection getConnection() throws SQLException {
+        if (connection == null || connection.isClosed()) {
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("Reconexión a la base de datos");
         }
         return connection;
     }

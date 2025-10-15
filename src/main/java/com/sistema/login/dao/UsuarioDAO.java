@@ -2,6 +2,7 @@ package com.sistema.login.dao;
 
 import com.sistema.login.database.DatabaseConnection;
 import com.sistema.login.model.Usuario;
+import com.sistema.login.builder.UsuarioBuilder;
 import java.sql.*;
 
 public class UsuarioDAO {
@@ -10,7 +11,7 @@ public class UsuarioDAO {
         String sql = "INSERT INTO usuarios (username, correo, password_hash, nombre_completo, fecha_nacimiento) " +
                 "VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             // Asignar valores a los parámetros (los ? en la consulta)
@@ -33,7 +34,7 @@ public class UsuarioDAO {
     public boolean existeUsername(String username) {
         String sql = "SELECT COUNT(*) FROM usuarios WHERE username = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, username);
@@ -52,7 +53,7 @@ public class UsuarioDAO {
     public boolean existeCorreo(String correo) {
         String sql = "SELECT COUNT(*) FROM usuarios WHERE correo = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, correo);
@@ -71,7 +72,7 @@ public class UsuarioDAO {
     public Usuario buscarUsuario(String usernameOCorreo) {
         String sql = "SELECT * FROM usuarios WHERE username = ? OR correo = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, usernameOCorreo);
@@ -79,16 +80,16 @@ public class UsuarioDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                // Crear objeto Usuario con los datos de la base de datos
-                return new Usuario(
-                        rs.getInt("id"),
-                        rs.getString("username"),
-                        rs.getString("correo"),
-                        rs.getString("password_hash"),
-                        rs.getTimestamp("fecha_registro").toLocalDateTime(),
-                        rs.getString("nombre_completo"),
-                        rs.getDate("fecha_nacimiento").toLocalDate()
-                );
+                // Usar el Builder para crear el objeto Usuario
+                return UsuarioBuilder.crear()
+                        .conId(rs.getInt("id"))
+                        .conUsername(rs.getString("username"))
+                        .conCorreo(rs.getString("correo"))
+                        .conPasswordHash(rs.getString("password_hash"))
+                        .conFechaRegistro(rs.getTimestamp("fecha_registro").toLocalDateTime())
+                        .conNombreCompleto(rs.getString("nombre_completo"))
+                        .conFechaNacimiento(rs.getDate("fecha_nacimiento").toLocalDate())
+                        .build();
             }
 
         } catch (SQLException e) {
